@@ -19,4 +19,9 @@ class Post extends Model
         'content',
         'image',
     ];
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }
