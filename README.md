@@ -1,61 +1,113 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Blog Application
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This is a simple Laravel blog application with a responsive design, featuring blog posts and a comment section with AJAX functionality. Posts include titles, content, and images sourced from Picsum Photos. The application uses MySQL for data storage, Tailwind CSS for styling, and includes a dark mode toggle for enhanced user experience.
 
-## About Laravel
+## Features
+- **Responsive Design**: Built with Tailwind CSS for mobile-friendly layouts.
+- **Blog Posts**: Display posts with titles, content, and images from `https://picsum.photos/200/300?random={id}`.
+- **Comment Section**: Add and view comments on posts without page reload using AJAX.
+- **Dark Mode**: Toggle between light and dark themes, with preferences saved in local storage.
+- **Database**: MySQL backend with seeded data for posts and comments.
+- **Eloquent ORM**: Leverages Laravel's Eloquent for managing posts and comments with relationships.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Prerequisites
+- PHP >= 8.0
+- Composer
+- MySQL
+- Node.js (for Tailwind CSS, optional if using CDN)
+- Laravel CLI (optional)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Installation
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/ixmsanto/blog-ui-laravel.git
+   cd blog-ui-laravel
+   ```
 
-## Learning Laravel
+2. **Install Dependencies**
+   ```bash
+   composer install
+   ```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+3. **Configure Environment**
+   - Copy the `.env.example` file to `.env`:
+     ```bash
+     cp .env.example .env
+     ```
+   - Update the `.env` file with your MySQL database credentials:
+     ```
+     DB_CONNECTION=mysql
+     DB_HOST=127.0.0.1
+     DB_PORT=3306
+     DB_DATABASE=blog_db
+     DB_USERNAME=your_username
+     DB_PASSWORD=your_password
+     ```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+4. **Generate Application Key**
+   ```bash
+   php artisan key:generate
+   ```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+5. **Run Migrations and Seeders**
+   - Create the database (`blog_db`) in MySQL.
+   - Run migrations to create tables:
+     ```bash
+     php artisan migrate
+     ```
+   - Seed the database with sample posts and comments:
+     ```bash
+     php artisan db:seed
+     ```
 
-## Laravel Sponsors
+6. **Serve the Application**
+   ```bash
+   php artisan serve
+   ```
+   - Access the application at `http://localhost:8000/posts`.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Project Structure
+- `app/Models/`: Contains `Post` and `Comment` models with Eloquent relationships.
+- `database/migrations/`: Defines `posts` and `comments` table schemas.
+- `database/factories/`: Factories for generating fake posts and comments.
+- `database/seeders/`: Seeders to populate the database with sample data.
+- `app/Http/Controllers/`: Controllers for handling post display and comment submission.
+- `resources/views/posts/`: Blade template for rendering the blog page.
+- `routes/web.php`: Defines routes for posts and comments.
 
-### Premium Partners
+## Usage
+- **View Posts**: Navigate to `/posts` to see all blog posts with their titles, images, and content excerpts.
+- **Add Comments**: Use the comment form below each post to submit a comment. Comments are added via AJAX and appear instantly.
+- **Dark Mode**: Click the toggle button in the header to switch between light and dark themes.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
+## Database Details
+- **Posts Table**:
+  - `id`: Primary key.
+  - `title`: Post title.
+  - `content`: Post content.
+  - `image`: Image URL (e.g., `https://picsum.photos/200/300?random=1`).
+  - `created_at`, `updated_at`: Timestamps.
+- **Comments Table**:
+  - `id`: Primary key.
+  - `post_id`: Foreign key referencing `posts(id)`.
+  - `content`: Comment text.
+  - `created_at`, `updated_at`: Timestamps.
+
+## Notes
+- The application uses a CDN for Tailwind CSS. For production, consider compiling Tailwind locally using Node.js.
+- Comments are not tied to authenticated users in this version. To add user authentication, integrate Laravel’s authentication system.
+- Ensure your server has internet access to load Picsum Photos images.
 
 ## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+1. Fork the repository.
+2. Create a feature branch (`git checkout -b feature/YourFeature`).
+3. Commit your changes (`git commit -m 'Add YourFeature'`).
+4. Push to the branch (`git push origin feature/YourFeature`).
+5. Open a pull request.
 
 ## License
+This project is licensed under the MIT License.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Contact
+For questions or feedback, open an issue on GitHub or contact [contact@ixmsanto.me](mailto:contact@ixmsanto.me).
